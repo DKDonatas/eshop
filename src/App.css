@@ -1,42 +1,140 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* ========== Skip link (screen readers / keyboard nav) ========== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 0 0 6px 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: top 0.1s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ========== Error boundary ========== */
+.error-boundary {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
   padding: 2rem;
+  background: var(--bg);
+}
+
+.error-boundary__inner {
+  max-width: 480px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.error-boundary__title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  margin: 0 0 1rem;
+  color: var(--text);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.error-boundary__message {
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.error-boundary__detail {
+  background: var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: var(--error);
+  text-align: left;
+  overflow-x: auto;
+  margin: 0 0 1.5rem;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-.card {
-  padding: 2em;
+/* ========== Layout ========== */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.read-the-docs {
-  color: #888;
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+/* ========== Shared page layout ========== */
+.page {
+  padding: 2rem 0;
+  text-align: left;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.page h1 {
+  font-family: var(--font-heading);
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+/* NotFound – h1 with no siblings gets extra breathing room */
+.page h1:only-child {
+  padding: 3rem 0;
+}
+
+/* ========== Shared UI states ========== */
+.loading-state,
+.error-message {
+  margin: 2rem 0;
+  color: var(--text-muted);
+}
+
+.error-message {
+  color: var(--error);
+}
+
+/* ========== Shared buttons ========== */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn--secondary {
+  color: var(--text-muted);
+}
+
+.btn--secondary:hover {
+  border-color: var(--error);
+  color: var(--error);
 }

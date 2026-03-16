@@ -1,0 +1,26 @@
+.favorites-page__empty {
+  text-align: center;
+  margin: 1.5rem 0;
+  color: var(--text-muted);
+}
+
+.favorites-page__link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.favorites-page .product-grid {
+  text-align: left;
+}
+
+.favorites-card-wrap {
+  position: relative;
+}
+
+.favorites-card-wrap__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0 1.25rem 1.25rem;
+}

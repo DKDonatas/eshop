@@ -1,0 +1,20 @@
+.about-page__lead {
+  font-size: 1.1rem;
+  margin-bottom: 1.75rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.about-page__section {
+  margin-bottom: 1.75rem;
+}
+
+.about-page__section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-page__section p {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
