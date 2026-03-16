@@ -1,14 +1,16 @@
-## E‑shop – React storefront
+## E‑shop – React + Supabase storefront
 
-Modern e‑commerce storefront built with React and Vite. It features category‑based browsing, search and sorting, favorites and cart management, and a clean, responsive UI.
+Modern e‑commerce storefront built with React and Vite, backed by Supabase for auth and data. It features category‑based browsing, search and sorting, favorites and cart management, a first‑order discount for registered users, and a clean, responsive UI.
 
 ### Features
 
 - **Product catalog**: Fetches products and categories from an API and displays them in a responsive grid.
 - **Filtering and search**: Filter by category, search by name, and sort by price, rating, or name.
-- **Favorites and cart**: Add items to favorites or cart and manage quantities from dedicated pages.
+- **Favorites and cart**: Add items to favorites or cart, with per‑user persistence planned via Supabase.
 - **Product detail view**: See detailed information for each product on its own page.
-- **Checkout and orders**: Simple checkout flow and orders page to review previous purchases.
+- **Checkout and orders**: Guest checkout plus logged‑in checkout that saves orders to Supabase.
+- **First‑order discount**: Logged‑in users get 10% off their first purchase, enforced via the database and visible in cart and checkout.
+- **Authentication**: Email/password sign‑up and sign‑in with Supabase Auth.
 - **Error handling and loading states**: Error boundary, skeleton loaders, and inline error messages for a smooth UX.
 - **Accessibility**: Skip‑to‑content link, semantic structure, and ARIA attributes where appropriate.
 
@@ -16,7 +18,8 @@ Modern e‑commerce storefront built with React and Vite. It features category�
 
 - **React** with **React Router** for SPA navigation
 - **Vite** for fast dev server and builds
-- **Custom hooks** for debounced search and local storage
+- **Supabase** for authentication and persisted orders (Postgres + RLS)
+- **Custom hooks** for debounced search, local storage, auth, and discounts
 - **Context** for global shop state (cart, favorites, etc.)
 
 ### Getting started
@@ -49,11 +52,13 @@ Then open the URL printed in the terminal (usually `http://localhost:5173`).
 - **`src/components/*`**: Reusable UI building blocks (navigation, hero, product grid, cards, filters, skeletons, etc.).
 - **`src/context/*`**: Shop context and provider for shared state.
 - **`src/api/*`**: API helpers for fetching products and categories.
+- **`src/lib/supabaseClient.js`**: Supabase client configuration.
+- **`src/context/AuthContext.jsx`** and **`src/hooks/useAuth.js`**: Authentication state and helpers.
 
 ### Future improvements
 
-- **Authentication and user accounts**
 - **Real payment integration**
-- **Persistent backend for orders and products**
+- **Supabase‑backed product catalog instead of external API**
+- **Full per‑user favorites and carts stored in Supabase**
 - **More advanced filtering (price ranges, tags, etc.)**
 
