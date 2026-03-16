@@ -2,6 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useShop } from "../../hooks/useShop";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useAuth } from "../../hooks/useAuth";
+import { useFirstOrderDiscount } from "../../hooks/useFirstOrderDiscount";
+import { supabase } from "../../lib/supabaseClient";
 import "./CheckoutPage.css";
 
 const AUTO_CLOSE_SECONDS = 10;
@@ -10,6 +13,7 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const { cart, cartTotal, clearCart } = useShop();
   const [, saveOrder] = useLocalStorage("eshop_orders", []);
+  const { isAuthenticated, user } = useAuth();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,6 +29,13 @@ function CheckoutPage() {
   const cityRef = useRef(null);
   const postalCodeRef = useRef(null);
   const modalCloseRef = useRef(null);
+
+  const { eligible: discountEligible } = useFirstOrderDiscount(user);
+  const hasDiscount = isAuthenticated && discountEligible && cartTotal > 0;
+  const discountAmount = hasDiscount ? Number((cartTotal * 0.1).toFixed(2)) : 0;
+  const finalCartTotal = hasDiscount
+    ? Number((cartTotal - discountAmount).toFixed(2))
+    : cartTotal;
 
   const closeModal = useCallback(() => {
     setConfirmation(null);
@@ -79,8 +90,8 @@ function CheckoutPage() {
     [cart],
   );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (!isValid) {
       if (!fullName.trim()) {
         fullNameRef.current?.focus();
@@ -97,7 +108,7 @@ function CheckoutPage() {
     }
 
     const orderId = `ORD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-    const order = {
+    const baseOrder = {
       orderId,
       date: new Date().toISOString(),
       fullName: fullName.trim(),
@@ -111,11 +122,40 @@ function CheckoutPage() {
         price: product.price,
         lineTotal: product.price * quantity,
       })),
-      total: cartTotal,
+      total: finalCartTotal,
     };
 
-    setConfirmation(order);
-    saveOrder((prev) => [order, ...prev]);
+    if (isAuthenticated && user) {
+      try {
+        const payload = {
+          user_id: user.id,
+          total: finalCartTotal,
+          status: "confirmed",
+          discount_applied: hasDiscount,
+          items: {
+            ...baseOrder,
+            originalTotal: cartTotal,
+            total: finalCartTotal,
+            discountApplied: hasDiscount,
+            discountPercent: hasDiscount ? 10 : 0,
+          },
+        };
+
+        await supabase.from("orders").insert(payload);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Failed to save order to Supabase", error);
+      }
+    }
+
+    const finalOrder = {
+      ...baseOrder,
+      total: finalCartTotal,
+      discountApplied: hasDiscount,
+    };
+
+    setConfirmation(finalOrder);
+    saveOrder((prev) => [finalOrder, ...prev]);
     clearCart();
   };
 
@@ -221,7 +261,24 @@ function CheckoutPage() {
             ))}
           </ul>
           <div className="checkout-summary__total">
-            <strong>Total: €{cartTotal.toFixed(2)}</strong>
+            {!hasDiscount ? (
+              <strong>Total: €{cartTotal.toFixed(2)}</strong>
+            ) : (
+              <>
+                <div>
+                  <span className="checkout-summary__label">Subtotal:</span>{" "}
+                  <span>€{cartTotal.toFixed(2)}</span>
+                </div>
+                <div className="checkout-summary__discount">
+                  <span className="checkout-summary__label">First order discount (10%):</span>{" "}
+                  <span>-€{discountAmount.toFixed(2)}</span>
+                </div>
+                <div className="checkout-summary__final">
+                  <strong className="checkout-summary__label">You&apos;ll pay:</strong>{" "}
+                  <strong>€{finalCartTotal.toFixed(2)}</strong>
+                </div>
+              </>
+            )}
           </div>
         </aside>
       </div>

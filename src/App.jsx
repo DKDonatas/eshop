@@ -3,6 +3,7 @@ import MainNav from "./components/MainNav";
 import Footer from "./components/Footer";
 import ErrorBoundary from "./components/ErrorBoundary";
 import HomePage from "./pages/Home/HomePage";
+import AuthPage from "./pages/Auth/AuthPage";
 import AboutPage from "./pages/About/AboutPage";
 import ContactPage from "./pages/Contact/ContactPage";
 import CartPage from "./pages/Cart/CartPage";
@@ -24,6 +25,7 @@ function App() {
         <main id="main-content" className="app-main">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/auth" element={<AuthPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/cart" element={<CartPage />} />

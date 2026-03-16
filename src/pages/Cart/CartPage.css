@@ -106,8 +106,21 @@
 }
 
 .cart-page__total {
-  font-size: 1.25rem;
+  font-size: 1rem;
   margin-bottom: 1rem;
+}
+
+.cart-page__total-label {
+  font-weight: 500;
+}
+
+.cart-page__total-discount {
+  color: var(--success);
+}
+
+.cart-page__total-final {
+  margin-top: 0.25rem;
+  font-size: 1.1rem;
 }
 
 .cart-page__footer {
