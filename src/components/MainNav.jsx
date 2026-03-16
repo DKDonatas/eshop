@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useShop } from "../hooks/useShop";
+import { useAuth } from "../hooks/useAuth";
 import "./MainNav.css";
 
 /**
@@ -9,6 +10,7 @@ import "./MainNav.css";
  */
 function MainNav() {
   const { cartCount } = useShop();
+  const { isAuthenticated, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const hamburgerRef = useRef(null);
@@ -70,6 +72,26 @@ function MainNav() {
               </span>
             )}
           </Link>
+          {!isAuthenticated ? (
+            <>
+              <Link to="/auth" state={{ mode: "signin" }} className="main-nav__auth-link">
+                Sign in
+              </Link>
+              <Link to="/auth" state={{ mode: "signup" }} className="main-nav__auth-link">
+                Register
+              </Link>
+            </>
+          ) : (
+            <button
+              type="button"
+              className="main-nav__auth-button"
+              onClick={() => {
+                signOut();
+              }}
+            >
+              Sign out
+            </button>
+          )}
         </nav>
 
         {/* Hamburger button – mobile only */}
@@ -109,6 +131,26 @@ function MainNav() {
             </span>
           )}
         </Link>
+        {!isAuthenticated ? (
+          <>
+            <Link to="/auth" state={{ mode: "signin" }}>
+              Sign in
+            </Link>
+            <Link to="/auth" state={{ mode: "signup" }}>
+              Register
+            </Link>
+          </>
+        ) : (
+          <button
+            type="button"
+            className="main-nav__auth-button main-nav__auth-button--mobile"
+            onClick={() => {
+              signOut();
+            }}
+          >
+            Sign out
+          </button>
+        )}
       </nav>
     </header>
   );

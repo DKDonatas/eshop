@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
 import { useShop } from "../../hooks/useShop";
+import { useAuth } from "../../hooks/useAuth";
+import { useFirstOrderDiscount } from "../../hooks/useFirstOrderDiscount";
 import "./CartPage.css";
 
 function CartPage() {
   const { cart, cartTotal, removeFromCart, updateCartQuantity } = useShop();
+  const { isAuthenticated, user } = useAuth();
+  const { eligible } = useFirstOrderDiscount(user);
+
+  const hasDiscount = isAuthenticated && eligible && cartTotal > 0;
+  const discountAmount = hasDiscount ? Number((cartTotal * 0.1).toFixed(2)) : 0;
+  const finalTotal = hasDiscount ? Number((cartTotal - discountAmount).toFixed(2)) : cartTotal;
 
   if (cart.length === 0) {
     return (
@@ -20,6 +28,16 @@ function CartPage() {
   return (
     <div className="page cart-page">
       <h1>Your Cart</h1>
+        {!isAuthenticated && (
+          <div className="cart-page__promo" role="status" aria-live="polite">
+            <strong>New here?</strong> Create an account and log in to get{" "}
+            <strong>10% off your first purchase.</strong>{" "}
+            <Link to="/auth" state={{ mode: "signup" }} className="cart-page__promo-link">
+              Sign up or log in
+            </Link>
+            .
+          </div>
+        )}
       <ul className="cart-list" aria-label="Cart items">
         {cart.map(({ product, quantity }) => (
           <li key={product.id} className="cart-item">
@@ -65,7 +83,24 @@ function CartPage() {
       </ul>
       <div className="cart-page__footer">
         <div className="cart-page__total">
-          <strong>Total: €{cartTotal.toFixed(2)}</strong>
+          {!hasDiscount ? (
+            <strong>Total: €{cartTotal.toFixed(2)}</strong>
+          ) : (
+            <>
+              <div>
+                <span className="cart-page__total-label">Subtotal:</span>{" "}
+                <span>€{cartTotal.toFixed(2)}</span>
+              </div>
+              <div className="cart-page__total-discount">
+                <span className="cart-page__total-label">First order discount (10%):</span>{" "}
+                <span>-€{discountAmount.toFixed(2)}</span>
+              </div>
+              <div className="cart-page__total-final">
+                <strong className="cart-page__total-label">You&apos;ll pay:</strong>{" "}
+                <strong>€{finalTotal.toFixed(2)}</strong>
+              </div>
+            </>
+          )}
         </div>
         <div className="cart-page__actions">
           <Link to="/" className="btn btn--secondary">

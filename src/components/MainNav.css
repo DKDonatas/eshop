@@ -66,6 +66,30 @@
   vertical-align: middle;
 }
 
+.main-nav__auth-link,
+.main-nav__auth-button {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.main-nav__auth-link:hover,
+.main-nav__auth-button:hover {
+  color: var(--accent);
+}
+
+.main-nav__auth-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.main-nav__auth-button--mobile {
+  text-align: left;
+  margin-top: 0.5rem;
+}
+
 /* ========== Hamburger button (hidden on desktop) ========== */
 .main-nav__hamburger {
   display: none;

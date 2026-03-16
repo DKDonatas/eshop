@@ -109,6 +109,19 @@
   font-size: 1.1rem;
 }
 
+.checkout-summary__label {
+  font-weight: 500;
+}
+
+.checkout-summary__discount {
+  color: var(--success);
+}
+
+.checkout-summary__final {
+  margin-top: 0.25rem;
+  font-size: 1.05rem;
+}
+
 /* Modal */
 .modal-overlay {
   position: fixed;
