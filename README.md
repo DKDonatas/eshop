@@ -1,6 +1,6 @@
 ## E‑shop – React + Supabase storefront
 
-A modern e‑commerce demo built with React, Vite, and Supabase. It showcases real‑world UX like product browsing, filtering, favorites, cart + checkout, and a first‑order discount backed by a Postgres database.
+A modern e‑commerce demo built with React, Vite, and Supabase. It uses the public Fake Store API for product data and is intended as a learning / portfolio project, not a production shop. The app showcases real‑world UX like product browsing, filtering, favorites, cart + checkout, and a first‑order discount backed by a Postgres database.
 
 ### Highlights
 
